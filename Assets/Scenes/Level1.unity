@@ -13565,7 +13565,7 @@ TilemapCollider2D:
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: db98a07fbe96b43ea8b5e8bfb92d58b6, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -13765,7 +13765,7 @@ TilemapCollider2D:
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: db98a07fbe96b43ea8b5e8bfb92d58b6, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -18998,10 +18998,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e229a99d42a754461892ec43d20c7dad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PenguinController
-  speed: 6
-  smoothTime: 0.5
-  diveForceMultiplier: 4
-  diveAcceleration: 20
+  speed: 7
+  smoothTime: 0.8
+  diveForceMultiplier: 5
+  diveAcceleration: 5
   swimForce: 6
   swimSpeed: 4
   rb: {fileID: 1186817619}
@@ -19068,7 +19068,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!212 &1186817620
 SpriteRenderer:
   serializedVersion: 2
