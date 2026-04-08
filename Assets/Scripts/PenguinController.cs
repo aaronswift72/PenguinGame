@@ -2,15 +2,17 @@ using UnityEngine;
 
 public class PenguinController : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public float speed = 5f;
+    public Rigidbody2D rb;
+    private Vector2 velocityRef = Vector2.zero;
     void Start()
     {
-        
+        rb = GetComponent<Rigidbody2D>();
     }
-
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        
+        Vector2 currentVelocity = rb.linearVelocity;
+        Vector2 targetVelocity = new Vector2(speed, currentVelocity.y);
+        rb.linearVelocity = Vector2.SmoothDamp(currentVelocity, targetVelocity, ref velocityRef, 1f);
     }
 }
