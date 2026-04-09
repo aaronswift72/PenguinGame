@@ -13,6 +13,7 @@ public class PenguinController : MonoBehaviour
 
     public Rigidbody2D rb;
     private float xVelocityRef = 0;
+    private float airTime;
 
     public enum PenguinState {Sliding, Swimming, Gliding}
     public PenguinState currentState = PenguinState.Sliding;
@@ -23,12 +24,19 @@ public class PenguinController : MonoBehaviour
 
     void Start()
     {
+        airTime = Time.time;
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
     }
 
     void FixedUpdate()
     {
+        if (currentState == PenguinState.Sliding && Time.time - airTime > 0.5f)
+        {
+            currentState = PenguinState.Gliding;
+            animator.SetBool("isGliding", true);
+        }
+
         if (currentState == PenguinState.Sliding)
         {
             HandleSliding();
@@ -91,6 +99,7 @@ public class PenguinController : MonoBehaviour
         {
             currentState = PenguinState.Swimming;
             animator.SetBool("isSwimming", true);
+            animator.SetBool("isGliding", false);
             splash.Play();
             swim.Play();
         }
@@ -121,8 +130,16 @@ public class PenguinController : MonoBehaviour
             print("Impact angle: " + impactAngle);
 
             // play different animations based on success of landing
-
+            animator.SetBool("isGliding", false);
             currentState = PenguinState.Sliding;
+        }
+    }
+
+    void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ice"))
+        {
+            airTime = Time.time;
         }
     }
 }
