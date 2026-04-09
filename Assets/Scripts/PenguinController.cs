@@ -89,7 +89,7 @@ public class PenguinController : MonoBehaviour
         //Space to descend
         if(Keyboard.current.spaceKey.isPressed)
         {
-            // apply downward force
+            rb.AddForce(Vector2.down * swimForce, ForceMode2D.Force);
         }
     }
 
