@@ -14,7 +14,7 @@ public class PenguinController : MonoBehaviour
     public Rigidbody2D rb;
     private float xVelocityRef = 0;
 
-    public enum PenguinState {Sliding, Swimming}
+    public enum PenguinState {Sliding, Swimming, Gliding}
     public PenguinState currentState = PenguinState.Sliding;
     private Animator animator;
 
@@ -30,9 +30,13 @@ public class PenguinController : MonoBehaviour
         {
             HandleSliding();
         }
-        else
+        else if (currentState == PenguinState.Swimming)
         {
             HandleSwimming();
+        }
+        else
+        {
+            HandleGliding();
         }
     }
     
@@ -67,6 +71,16 @@ public class PenguinController : MonoBehaviour
         }
     }
 
+    // Called when gliding
+    void HandleGliding()
+    {
+        //Space to descend
+        if(Keyboard.current.spaceKey.isPressed)
+        {
+            // apply downward force
+        }
+    }
+
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Water"))
@@ -82,6 +96,24 @@ public class PenguinController : MonoBehaviour
         {
             currentState = PenguinState.Sliding;
             animator.SetBool("isSwimming", false);
+        }
+    }
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        // if penguin lands on ice
+        if (collision.gameObject.CompareTag("Ice") && currentState == PenguinState.Gliding)
+        {
+            // calculate landing angle
+            Vector2 velocity = GetComponent<Rigidbody2D>().linearVelocity;
+            Vector2 normal = collision.GetContact(0).normal;
+            float impactAngle = Vector2.Angle(velocity, -normal);
+            
+            // for debug
+            print("Impact angle: " + impactAngle);
+
+            // play different animations based on success of landing
+
+            currentState = PenguinState.Sliding;
         }
     }
 }
