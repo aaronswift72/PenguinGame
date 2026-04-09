@@ -125,4 +125,22 @@ public class PenguinController : MonoBehaviour
             currentState = PenguinState.Sliding;
         }
     }
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        // if penguin lands on ice
+        if (collision.gameObject.CompareTag("Ice") && currentState == PenguinState.Gliding)
+        {
+            // calculate landing angle
+            Vector2 velocity = GetComponent<Rigidbody2D>().linearVelocity;
+            Vector2 normal = collision.GetContact(0).normal;
+            float impactAngle = Vector2.Angle(velocity, -normal);
+            
+            // for debug
+            print("Impact angle: " + impactAngle);
+
+            // play different animations based on success of landing
+
+            currentState = PenguinState.Sliding;
+        }
+    }
 }
