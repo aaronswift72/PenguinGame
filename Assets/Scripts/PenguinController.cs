@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using TMPro;
 
 public class PenguinController : MonoBehaviour
 {
@@ -13,11 +12,8 @@ public class PenguinController : MonoBehaviour
     public float swimSpeed = 3f;
 
     public Rigidbody2D rb;
-    public TMP_Text scoreText;
-    private int score = 0;
     private float xVelocityRef = 0;
     private float airTime;
-    private Vector2 collisionVelocity;
 
     public enum PenguinState {Sliding, Swimming, Gliding}
     public PenguinState currentState = PenguinState.Sliding;
@@ -53,7 +49,6 @@ public class PenguinController : MonoBehaviour
         {
             HandleGliding();
         }
-        collisionVelocity = rb.linearVelocity;
     }
     
     //Called when in land
@@ -108,13 +103,6 @@ public class PenguinController : MonoBehaviour
             splash.Play();
             swim.Play();
         }
-
-        if (other.CompareTag("Fish"))
-        {
-            other.gameObject.GetComponent<Animator>().SetTrigger("fishCollect");
-            score++;
-            scoreText.SetText("Score: " + score);
-        }
     }
     
     void OnTriggerExit2D(Collider2D other)
@@ -134,17 +122,16 @@ public class PenguinController : MonoBehaviour
         if (collision.gameObject.CompareTag("Ice") && currentState == PenguinState.Gliding)
         {
             // calculate landing angle
+            Vector2 velocity = GetComponent<Rigidbody2D>().linearVelocity;
             Vector2 normal = collision.GetContact(0).normal;
-            float impactAngle = Vector2.Angle(collisionVelocity, -normal);
+            float impactAngle = Vector2.Angle(velocity, -normal);
             
-            animator.SetBool("isGliding", false);
-            airTime = Time.time;
-            currentState = PenguinState.Sliding;
-
             // for debug
-            print("v: " + collisionVelocity);
-            print("n: " + normal);
             print("Impact angle: " + impactAngle);
+
+            // play different animations based on success of landing
+            animator.SetBool("isGliding", false);
+            currentState = PenguinState.Sliding;
         }
     }
 
